@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # JewelSync ERP — Jewellery Billing & Inventory System
 
 Lightweight PHP-based billing, inventory and invoicing system tailored for jewellery stores.
@@ -69,58 +70,74 @@ Key folders and responsibilities:
 - `ajax/` — AJAX endpoints used by the frontend
 - `api/` — lightweight API endpoints
 - `assets/` — CSS and JS
-- `billing/` — invoice generation and printing
-- `config/` — DB and application configuration
-- `customers/`, `inventory/`, `payments/`, `reports/`, `settings/` — feature modules
-- `database/schema.sql` — full database schema and create statements
+<!-- Merged README: combines both summaries and usage instructions -->
 
-## Running with XAMPP (macOS)
+# JewelSync ERP — Jewellery Billing & Inventory System
 
-1. Copy the `jewellery` folder to `/Applications/XAMPP/htdocs/`.
-2. Start Apache & MySQL from the XAMPP control panel.
-3. Import `database/schema.sql` using phpMyAdmin (http://localhost/phpmyadmin) or the mysql CLI.
-4. Visit http://localhost/jewellery
+Lightweight PHP-based billing, inventory and invoicing system tailored for jewellery stores.
 
-## Troubleshooting
+## One-line summary
 
-- Blank pages or PHP errors: enable display_errors in `php.ini` (development only) and check the webserver/PHP error log.
-- Database connection failures: confirm credentials in `config/database.php` and that MySQL is running. The default DB in config is `jewellery_billing`.
-- Missing uploads/invoices folders: ensure `uploads/` and `invoices/` exist and are writable by your web server user.
+- Purpose: manage customers, invoices, metal rates, stock, payments and reports.
+- Language: PHP (PDO), MySQL (MariaDB/MySQL)
 
-## Security & production notes
+## Requirements
 
-- Never expose error details in production.
-- Use strong passwords and restrict DB access.
-- Use HTTPS in production.
-- Regularly backup `database/schema.sql` and your DB data.
+- PHP 7.4+ with PDO and common extensions (pdo_mysql, mbstring, json)
+- MySQL 5.7+ / MariaDB
+- Web server (Apache/Nginx) or PHP built-in server for development
 
-## Developer notes & useful commands
+## Quick start (local)
 
-- Run a quick PHP version check:
+1. Import database schema:
 
 ```bash
-php -v
+mysql -u root -p < database/schema.sql
 ```
 
-- Import DB from the project root (MySQL CLI):
+2. Update DB credentials in `config/database.php` and `BASE_URL` in `config/constants.php` when needed.
+
+3. Start dev server:
 
 ```bash
-mysql -u root -p jewellery_billing < database/schema.sql
+cd /path/to/jewellery
+php -S 127.0.0.1:8000
 ```
 
-## Where to look next
+4. Open http://127.0.0.1:8000 (or http://localhost/jewellery for XAMPP).
 
-- Login page: `login.php`
-- App entry: `index.php` (redirects to `login.php`)
-- DB setup script: `database/schema.sql`
+## Default credentials (if present)
 
-## License
+- Username: `admin`
+- Password: `admin123`
 
-This repository does not include an explicit license file. Treat it as proprietary unless you add a LICENSE.
+## Important files & folders
+
+- `index.php` — app entry (redirects to `login.php`)
+- `config/` — DB and app config
+- `database/schema.sql` — DB schema
+- `includes/` — shared PHP includes (`functions.php`, `header.php`, `footer.php`)
+
+## Troubleshooting notes
+
+- Database connection issues: ensure MySQL is running and `config/database.php` matches credentials & host.
+- Port conflicts: XAMPP and Homebrew MySQL both bind to 3306 — stop one before starting the other.
+
+## Next steps
+
+- Optionally import sample data from `database/` scripts.
+- Adjust `BASE_URL` when deploying under a subdirectory.
 
 ---
 
-If you want, I can also:
+If you want, I can import the schema and create a test admin user for you (provide DB credentials), or push the changes to GitHub for you.
 
-- import the schema automatically (if you provide DB root password) and create a test admin user, or
-- adjust `config/constants.php` -> `BASE_URL` to match a XAMPP install path and verify a login page loads.
+## Next steps / suggestions
+
+- Add an automated installer script that sets up the database and writes `config/database.php`.
+- Add unit/integration tests and a small Dockerfile or Compose for reproducible local development.
+
+## License & author
+
+Repository: `omsoni21/jewellery` (owner: omsoni21). No license file is included — add one if you want to make the project open source.
+>>>>>>> origin/main
