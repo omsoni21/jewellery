@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # If the project is hosted from a subdirectory (/jewellery),
+    # redirect root-level requests for common app pages to the subdirectory.
+    # This prevents 404s when clients request /dashboard.php instead of /jewellery/dashboard.php.
+    RewriteCond %{REQUEST_URI} ^/(login|dashboard|profile|logout|index)\.php$ [NC]
+    RewriteRule ^(.*)$ /jewellery/$1 [R=302,L]
+
+    # Ensure requests to the directory root are served from the subdirectory
+    RewriteCond %{REQUEST_URI} ^/$
+    RewriteRule ^$ /jewellery/ [R=302,L]
+</IfModule>
+
+# Fallback: deny access to sensitive files
+<FilesMatch "(^\.env|\.git|\.htpasswd|composer\.json)$">
+    Require all denied
+</FilesMatch>

@@ -8,7 +8,10 @@
 // Base URL - Set this to your project folder path
 // For XAMPP with project in htdocs/jewellery/, use: '/jewellery'
 // For root installation, use: ''
-define('BASE_URL', '');
+// When the app is served from a subdirectory (e.g. http://localhost/jewellery),
+// BASE_URL must include that subdirectory so generated redirects and links
+// point to the correct path.
+define('BASE_URL', '/jewellery');
 
 // Session Configuration
 define('SESSION_TIMEOUT', 1800); // 30 minutes in seconds
