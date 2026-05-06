@@ -1,0 +1,68 @@
+======================================
+📱 LOGIN FIX - SIMPLE STEPS
+======================================
+
+❌ PROBLEM: App mai login nahi ho raha
+
+✅ SOLUTION: Ye 3 steps follow karein
+
+======================================
+STEP 1: XAMPP START KAREIN
+======================================
+
+Terminal mai ye command run karein:
+    open /Applications/XAMPP/XAMPP\ Control.app
+
+XAMPP Control Panel mai:
+    → Apache ko START karein
+    → MySQL ko START karein
+
+Browser mai test karein:
+    http://localhost/jewellery/
+
+Agar page dikha to XAMPP is running! ✅
+
+======================================
+STEP 2: APK INSTALL KAREIN
+======================================
+
+Phone ko USB se connect karein aur ye run karein:
+    cd /Users/omsoni/Desktop/jewellery/android
+    adb install app/build/outputs/apk/debug/app-debug.apk
+
+Ya manually:
+    1. Ye file phone mai copy karein:
+       app/build/outputs/apk/debug/app-debug.apk
+    
+    2. Phone mai file open karein
+    3. Install tap karein
+
+======================================
+STEP 3: LOGIN KAREIN
+======================================
+
+App open karein aur login karein:
+    Username: admin
+    Password: admin123
+
+======================================
+
+✅ DONE! App login ho jayega!
+
+======================================
+
+⚠️ IMPORTANT:
+- XAMPP always running rakhein jab app use karein
+- Phone aur computer same WiFi par hone chahiye
+
+======================================
+
+🔧 AGAR PHIR BHI ISSUE HO:
+
+Diagnostic run karein:
+    /Users/omsoni/Desktop/jewellery/diagnose_login.sh
+
+Auto fix script run karein:
+    /Users/omsoni/Desktop/jewellery/fix_and_build.sh
+
+======================================

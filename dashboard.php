@@ -5,7 +5,15 @@
  */
 
 require_once __DIR__ . '/includes/functions.php';
+// ✅ SAFE fallback for formatCurrency
+if (!function_exists('formatCurrency')) {
+    function formatCurrency($amount)
+    {
+        return '₹' . number_format((float)$amount, 2);
+    }
+}
 requireAuth();
+
 
 $pageTitle = 'Dashboard';
 $db = getDBConnection();

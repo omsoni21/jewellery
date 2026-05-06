@@ -5,6 +5,15 @@
  */
 
 require_once __DIR__ . '/includes/functions.php';
+// ✅ SAFE fallback: agar logActivity exist nahi hai to create karo
+if (!function_exists('logActivity')) {
+    function logActivity($type, $message)
+    {
+        $file = __DIR__ . '/activity.log';
+        $date = date('Y-m-d H:i:s');
+        file_put_contents($file, "[$date] [$type] $message\n", FILE_APPEND);
+    }
+}
 
 // Redirect if already logged in
 if (isLoggedIn()) {
