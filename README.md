@@ -1,14 +1,29 @@
 <<<<<<< HEAD
+# 💎 JewelSync ERP — Jewellery Billing & Inventory System
 
-# JewelSync ERP — Jewellery Billing & Inventory System
+A modern PHP-based Jewellery Billing, Inventory, and GST Management System designed for jewellery shops and wholesalers.
 
-Lightweight PHP-based billing, inventory and invoicing system tailored for jewellery stores.
+## ✨ Features
 
-## Quick summary
+- 🧾 GST Billing & Invoice Generation
+- 📦 Inventory & Stock Management
+- 👥 Customer & Ledger Management
+- 💰 Gold/Silver Rate Management
+- 📊 Sales & GST Reports
+- 🔐 Secure Login System
+- 💳 Multiple Payment Methods
+- 📄 PDF Invoice Download
+- 📈 Outstanding Balance Tracking
+  
+## 🛠 Tech Stack
 
-- Purpose: manage customers, invoices, metal rates, stock, payments and reports.
-- Language: PHP (PDO), MySQL (MariaDB/MySQL)
-- Recommended for: small retail jewellery shops, local deployments (XAMPP, MAMP, LAMP).
+| Technology | Version |
+|------------|---------|
+| PHP | 8.x |
+| MySQL | 5.7+ |
+| Bootstrap | 5 |
+| JavaScript | ES6 |
+| HTML/CSS | HTML5/CSS3 |
 
 ## Checklist (your request)
 
