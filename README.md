@@ -1,4 +1,4 @@
-<<<<<<< main
+
 <div align="center">
 
 # 💎 JewelSync ERP
