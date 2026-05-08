@@ -386,8 +386,6 @@ Owner:
 omsoni21
 ```
 
-No license file is included — add one if you want to make the project open source.
-
 ---
 
 <div align="center">
