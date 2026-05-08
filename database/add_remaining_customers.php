@@ -5,6 +5,7 @@
  */
 
 require_once __DIR__ . '/../config/database.php';
+
 $db = getDBConnection();
 
 // Get current count
@@ -96,9 +97,11 @@ while ($added < $remaining) {
     }
   }
 }
+
 // Insert customers
 $values = implode(",\n", $customers);
 $sql = "INSERT INTO customers (customer_code, business_name, contact_person, phone, email, gst_number, pan_number, address_line1, address_line2, city, state, pincode, credit_limit, payment_terms, opening_balance, current_balance, is_active) VALUES\n$values";
+
 try {
   $db->exec($sql);
   echo "Successfully inserted $added customers\n";
