@@ -53,7 +53,7 @@ $max_customers = 500;
 while ($customer_count <= $max_customers) {
   foreach ($states_cities as $state => $cities) {
     foreach ($cities as $city_data) {
-      if ($customer_count > 250) break 2;
+     if ($customer_count > $max_customers) break 2;
 
       list($city, $pincode) = explode('|', $city_data);
 
@@ -88,7 +88,7 @@ while ($customer_count <= $max_customers) {
       $customer_count++;
     }
   }
-  if ($customer_count <= 250) {
+  if ($customer_count <= $max_customers) {
     continue;
   }
   break;
