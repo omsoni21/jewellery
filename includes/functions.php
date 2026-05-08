@@ -178,14 +178,65 @@ function generateInvoiceNumber()
     $date = date('Ymd');
     $file = __DIR__ . '/../invoice_counter.txt';
 
+    // Ensure counter file exists
     if (!file_exists($file)) {
-        file_put_contents($file, "1");
+        // initialize to 0 so first generated number will be 1
+        file_put_contents($file, "0");
     }
 
-    $counter = (int)file_get_contents($file);
-    $counter++;
+    // Try to generate a unique invoice number atomically using file locking.
+    // Also verify against the database to avoid collisions if the counter
+    // was adjusted externally.
+    $maxAttempts = 10000;
+    for ($attempt = 0; $attempt < $maxAttempts; $attempt++) {
+        $fp = fopen($file, 'c+');
+        if ($fp === false) {
+            throw new Exception('Unable to open invoice counter file for writing');
+        }
 
-    file_put_contents($file, $counter);
+        // Acquire exclusive lock
+        if (!flock($fp, LOCK_EX)) {
+            fclose($fp);
+            usleep(50000); // wait 50ms and retry
+            continue;
+        }
 
-    return "INV-" . $date . "-" . str_pad($counter, 3, '0', STR_PAD_LEFT);
+        // Read current counter, increment and write back
+        $contents = stream_get_contents($fp);
+        $counter = (int)trim($contents);
+        $counter++;
+
+        // Rewind and write the new counter
+        ftruncate($fp, 0);
+        rewind($fp);
+        fwrite($fp, (string)$counter);
+        fflush($fp);
+
+        // Release lock and close
+        flock($fp, LOCK_UN);
+        fclose($fp);
+
+        $invoiceNo = 'INV-' . $date . '-' . str_pad($counter, 3, '0', STR_PAD_LEFT);
+
+        // Verify uniqueness in DB if available
+        try {
+            if (function_exists('getDBConnection')) {
+                $db = getDBConnection();
+                $stmt = $db->prepare('SELECT COUNT(1) FROM invoices WHERE invoice_no = ?');
+                $stmt->execute([$invoiceNo]);
+                $exists = (int)$stmt->fetchColumn();
+                if ($exists) {
+                    // Collision detected — loop to try next counter
+                    continue;
+                }
+            }
+        } catch (Exception $e) {
+            // DB not available — still return generated value because
+            // we've used a locked file counter to avoid concurrent dupes
+        }
+
+        return $invoiceNo;
+    }
+
+    throw new Exception('Failed to generate unique invoice number after ' . $maxAttempts . ' attempts');
 }
