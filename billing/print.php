@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Print Invoice Page - Updated with all columns and company details
+ * Print Invoice Page - Updated with all columns and companies details.
  */
 
 require_once __DIR__ . '/../includes/functions.php';
@@ -41,7 +41,7 @@ foreach ($items as &$item) {
     }
 }
 
-// Company details
+// Company detail
 $companyName = 'Tirupati Balaji Jewellers';
 $companyAddress = 'Bagodar, Giridih';
 $companyState = 'Jharkhand';
