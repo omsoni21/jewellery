@@ -11,7 +11,6 @@ $db = getDBConnection();
 // Clear existing customers (except if you want to keep them, comment this out)
 // $db->exec("DELETE FROM customers");
 
-// Indian states and cities data with more cities
 $states_cities = [
   'Maharashtra' => ['Mumbai|400001', 'Pune|411001', 'Nagpur|440001', 'Thane|400601', 'Nashik|422001', 'Aurangabad|431001', 'Solapur|413001', 'Kolhapur|416001', 'Amravati|444601', 'Nanded|431601'],
   'Gujarat' => ['Surat|395001', 'Ahmedabad|380001', 'Vadodara|390001', 'Rajkot|360001', 'Bhavnagar|364001', 'Jamnagar|361001', 'Junagadh|362001', 'Gandhinagar|382001', 'Anand|388001', 'Morbi|363641'],
@@ -37,7 +36,10 @@ $gst_codes = [
   'Karnataka' => '29',
   'West Bengal' => '19',
   'Telangana' => '36',
-  'Kerala' => '32'
+  'Kerala' => '32',
+  'Madhya Pradesh' => '23',
+  'Delhi' => '07',
+  'Uttar Pradesh' => '09',
 ];
 
 $streets = ['Main Market', 'Ring Road', 'Gold Market', 'Silver Market', 'Diamond Street', 'Jewelry Lane', 'Commercial Street', 'Market Complex', 'Business District', 'Temple Road'];
@@ -45,9 +47,10 @@ $landmarks = ['Near City Center', 'Opposite Bus Stand', 'Sector ', 'Phase ', 'Ma
 
 $customers = [];
 $customer_count = 1;
+$max_customers = 500;
 
 // Generate 250 customers
-while ($customer_count <= 250) {
+while ($customer_count <= $max_customers) {
   foreach ($states_cities as $state => $cities) {
     foreach ($cities as $city_data) {
       if ($customer_count > 250) break 2;
@@ -86,7 +89,6 @@ while ($customer_count <= 250) {
     }
   }
   if ($customer_count <= 250) {
-    // Loop again if we haven't reached 250
     continue;
   }
   break;
