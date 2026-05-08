@@ -35,7 +35,7 @@ $items = $stmt->fetchAll();
 $stmt = $db->query("SELECT * FROM company_settings LIMIT 1");
 $company = $stmt->fetch();
 
-// Set headers for PDF-like output
+// Set headers for PDF-like outputs
 header('Content-Type: text/html');
 ?>
 <!DOCTYPE html>
