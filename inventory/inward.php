@@ -220,11 +220,11 @@ include __DIR__ . '/../includes/header.php';
                                 </div>
                                 <div class="col-md-2 mb-3">
                                     <label class="form-label">Gross Wt (g)</label>
-                                    <input type="number" name="items[0][gross_weight]" class="form-control" step="0.001" min="0">
+                                   <input type="number" name="items[0][gross_weight]" class="form-control" step="0.001" min="0" oninput="validateWeights(this)">
                                 </div>
                                 <div class="col-md-2 mb-3">
                                     <label class="form-label">Net Wt (g) <span class="text-danger">*</span></label>
-                                    <input type="number" name="items[0][net_weight]" class="form-control" step="0.001" min="0.001" required>
+                                   <input type="number" name="items[0][net_weight]" class="form-control" step="0.001" min="0.001" required oninput="validateWeights(this)">
                                 </div>
                                 <div class="col-md-2 mb-3">
                                     <label class="form-label">Wastage %</label>
