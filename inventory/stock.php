@@ -49,17 +49,8 @@ $stmt->execute($params);
 $stockItems = $stmt->fetchAll();
 
 // Get stock with minimum levels
-$query2 = "SELECT p.*, c.name as category_name, s.quantity, s.gross_weight, s.net_weight, s.wastage_weight,
-          p.minimum_stock, p.minimum_weight
-          FROM products p 
-          LEFT JOIN categories c ON p.category_id = c.id 
-          LEFT JOIN stock s ON p.id = s.product_id 
-          $whereClause 
-          ORDER BY p.metal_type, p.purity, p.name";
-
-$stmt2 = $db->prepare($query2);
-$stmt2->execute($params);
-$stockItems = $stmt2->fetchAll();
+// NOTE: Removed duplicate query that was overwriting $stockItems from above.
+// $stockItems is already populated by the query above.
 
 // Get categories for filter
 $stmt = $db->query("SELECT id, name FROM categories WHERE is_active = 1 ORDER BY name");
@@ -177,7 +168,7 @@ include __DIR__ . '/../includes/header.php';
                 <tbody>
                     <?php if (empty($stockItems)): ?>
                         <tr>
-                            <td colspan="8" class="text-center py-4 text-muted">No stock items found.</td>
+                            <td colspan="10" class="text-center py-4 text-muted">No stock items found.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($stockItems as $item):
