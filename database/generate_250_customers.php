@@ -65,7 +65,7 @@ while ($customer_count <= $max_customers) {
 
       $prefix = $name_prefixes[array_rand($name_prefixes)];
       $suffix = $name_suffixes[array_rand($name_suffixes)];
-      $business_name = $prefix . ' ' . $suffix . ' ' . ($customer_count > 100 ? '' : '');
+      $business_name = $prefix . ' ' . $city . ' ' . $suffix;
 
       $first_name = $first_names[array_rand($first_names)];
       $last_name = $last_names[array_rand($last_names)];
@@ -111,7 +111,7 @@ foreach ($batches as $batch_num => $batch) {
   try {
     $db->exec($sql);
     $total_inserted += count($batch);
-    echo "Batch " . ($batch_num + 1) . " inserted: " . count($batch) . " customers\n";
+    echo "[INFO] Batch " . ($batch_num + 1) . " inserted successfully with " . count($batch) . " customers\n";
   } catch (PDOException $e) {
     echo "Error in batch " . ($batch_num + 1) . ": " . $e->getMessage() . "\n";
   }
