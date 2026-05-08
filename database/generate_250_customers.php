@@ -20,6 +20,9 @@ $states_cities = [
   'West Bengal' => ['Kolkata|700001', 'Howrah|711101', 'Durgapur|713201', 'Asansol|713301', 'Siliguri|734001', 'Malda|732101', 'Bardhaman|713101', 'Baharampur|742101', 'Habra|743263', 'Kharagpur|721301'],
   'Telangana' => ['Hyderabad|500001', 'Warangal|506001', 'Nizamabad|503001', 'Karimnagar|505001', 'Khammam|507001', 'Ramagundam|505208', 'Mahbubnagar|509001', 'Nalgonda|508001', 'Adilabad|504001', 'Suryapet|508213'],
   'Kerala' => ['Kochi|682001', 'Trivandrum|695001', 'Kozhikode|673001', 'Thrissur|680001', 'Kollam|691001', 'Palakkad|678001', 'Alappuzha|688001', 'Malappuram|676501', 'Kannur|670001', 'Kottayam|686001'],
+  'Madhya Pradesh' => ['Bhopal|462001', 'Indore|452001', 'Jabalpur|482001', 'Gwalior|474001'],
+  'Delhi' => ['New Delhi|110001', 'Dwarka|110075', 'Rohini|110085'],
+  'Uttar Pradesh' => ['Lucknow|226001', 'Kanpur|208001', 'Agra|282001', 'Varanasi|221001'],
 ];
 
 $name_prefixes = ['Shree', 'Gold', 'Diamond', 'Silver', 'Royal', 'Kundan', 'Temple', 'Bridal', 'Elite', 'Pearl', 'Platinum', 'Jadau', 'Polki', 'Meenakari', 'Navratna', 'Antique', 'Modern', 'Traditional', 'Heritage', 'Lakshmi', 'Swarna', 'Kemp', 'Filigree', 'Thewa', 'Rudraksha'];
@@ -37,6 +40,9 @@ $gst_codes = [
   'West Bengal' => '19',
   'Telangana' => '36',
   'Kerala' => '32',
+  'Madhya Pradesh' => '23',
+  'Delhi' => '07',
+  'Uttar Pradesh' => '09',
   'Madhya Pradesh' => '23',
   'Delhi' => '07',
   'Uttar Pradesh' => '09',
