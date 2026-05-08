@@ -94,6 +94,9 @@ include __DIR__ . '/../includes/header.php';
         <button type="button" class="btn btn-outline-success ms-2" onclick="openAddStockModal()">
             <i class="bi bi-plus-square"></i> Quick Add Stock
         </button>
+        <button type="button" class="btn btn-outline-warning ms-2" onclick="openBulkAddModal()">
+            <i class="bi bi-stack"></i> Bulk Add to Listed
+        </button>
     </div>
 </div>
 
@@ -354,6 +357,47 @@ include __DIR__ . '/../includes/header.php';
     </div>
 </div>
 
+<!-- Bulk Add Modal -->
+<div class="modal" id="bulkAddModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="bulkAddForm" method="POST" action="<?php echo BASE_URL; ?>/inventory/bulk_add_stock.php">
+                <div class="modal-header">
+                    <h5 class="modal-title">Bulk Add to Listed Products</h5>
+                    <button type="button" class="btn-close" onclick="closeBulkAddModal()"></button>
+                </div>
+                <div class="modal-body">
+                    <p>This will add the same quantity and net weight to all products currently listed (respecting your filters).</p>
+                    <input type="hidden" name="metal_type" value="<?php echo htmlspecialchars($metalType); ?>">
+                    <input type="hidden" name="purity" value="<?php echo htmlspecialchars($purity); ?>">
+                    <input type="hidden" name="category_id" value="<?php echo (int)$categoryId; ?>">
+
+                    <div class="mb-3">
+                        <label class="form-label">Quantity to add (pcs)</label>
+                        <input type="number" name="quantity" class="form-control" value="1" min="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Net Weight to add (g) per product</label>
+                        <input type="number" name="net_weight" class="form-control" step="0.001" value="0.000" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Wastage % (optional)</label>
+                        <input type="number" name="wastage_percent" class="form-control" step="0.01" value="0">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Notes (optional)</label>
+                        <textarea name="notes" class="form-control" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeBulkAddModal()">Cancel</button>
+                    <button type="submit" class="btn btn-warning">Apply to Listed</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
 function openAddProductModal() {
     document.getElementById('addProductModal').style.display = 'block';
@@ -371,5 +415,11 @@ function openAddStockModal(id, name) {
 }
 function closeAddStockModal() {
     document.getElementById('addStockModal').style.display = 'none';
+}
+function openBulkAddModal() {
+    document.getElementById('bulkAddModal').style.display = 'block';
+}
+function closeBulkAddModal() {
+    document.getElementById('bulkAddModal').style.display = 'none';
 }
 </script>
