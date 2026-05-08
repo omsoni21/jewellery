@@ -16,6 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $metalType = $_POST['metal_type'] ?? 'gold';
     $purity = $_POST['purity'] ?? '22K';
     $description = sanitize($_POST['description'] ?? '');
+    $minimumStock = intval($_POST['minimum_stock'] ?? 0);
+    $minimumWeight = floatval($_POST['minimum_weight'] ?? 0);
     
     try {
         // Generate product code
@@ -24,8 +26,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $nextNum = ($result['max_num'] ?? 0) + 1;
         $productCode = 'PRD' . str_pad($nextNum, 4, '0', STR_PAD_LEFT);
         
-        $stmt = $db->prepare("INSERT INTO products (product_code, category_id, name, metal_type, purity, description) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$productCode, $categoryId, $name, $metalType, $purity, $description]);
+        // Insert product; include minimum_stock/minimum_weight if columns exist
+        $hasMinCols = false;
+        try {
+            $colCheck = $db->query("SHOW COLUMNS FROM products LIKE 'minimum_stock'")->fetch();
+            if ($colCheck) $hasMinCols = true;
+        } catch (Exception $e) {
+            // ignore
+        }
+
+        if ($hasMinCols) {
+            $stmt = $db->prepare("INSERT INTO products (product_code, category_id, name, metal_type, purity, description, minimum_stock, minimum_weight) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$productCode, $categoryId, $name, $metalType, $purity, $description, $minimumStock, $minimumWeight]);
+        } else {
+            $stmt = $db->prepare("INSERT INTO products (product_code, category_id, name, metal_type, purity, description) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$productCode, $categoryId, $name, $metalType, $purity, $description]);
+        }
         
         $productId = $db->lastInsertId();
         
@@ -238,6 +254,16 @@ include __DIR__ . '/../includes/header.php';
                     <div class="mb-3">
                         <label class="form-label">Description</label>
                         <textarea name="description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Minimum Stock (pcs)</label>
+                            <input type="number" name="minimum_stock" class="form-control" min="0" value="5">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Minimum Weight (g)</label>
+                            <input type="number" name="minimum_weight" class="form-control" step="0.001" min="0" value="10">
+                        </div>
                     </div>
                     
                     <div class="d-grid">

@@ -70,6 +70,10 @@ GROUP BY p.metal_type, p.purity
 ORDER BY p.metal_type, p.purity");
 $stockSummary = $stmt->fetchAll();
 
+// Full products list for quick-add (not filtered)
+$stmt = $db->query("SELECT id, name FROM products WHERE is_active = 1 ORDER BY name");
+$allProducts = $stmt->fetchAll();
+
 
 include __DIR__ . '/../includes/header.php';
 ?>
@@ -323,7 +327,7 @@ include __DIR__ . '/../includes/header.php';
                         <label class="form-label">Product</label>
                         <select name="items[0][product_id]" id="quickProductSelect" class="form-select" required>
                             <option value="">Select Product</option>
-                            <?php foreach ($stockItems as $p): ?>
+                            <?php foreach ($allProducts as $p): ?>
                                 <option value="<?php echo $p['id']; ?>"><?php echo $p['name']; ?></option>
                             <?php endforeach; ?>
                         </select>
