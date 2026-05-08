@@ -406,7 +406,7 @@ http://localhost/jewellery
 Repository:
 
 ```bash
-omsoni21/jewellery
+omsoni21/jewelsync_ERP
 ```
 
 Owner:
