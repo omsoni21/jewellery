@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Login Page
+ * Premium Login Page
  */
 
 require_once __DIR__ . '/includes/functions.php';
-// ✅ SAFE fallback: agar logActivity exist nahi hai to create karo
+
 if (!function_exists('logActivity')) {
     function logActivity($type, $message)
     {
@@ -24,22 +24,34 @@ if (isLoggedIn()) {
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
     $username = sanitize($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
 
     if (empty($username) || empty($password)) {
         $error = 'Please enter both username and password.';
     } else {
+
         $db = getDBConnection();
-        $stmt = $db->prepare("SELECT id, username, password_hash, email, full_name, role, is_active FROM users WHERE username = ?");
+
+        $stmt = $db->prepare("
+            SELECT id, username, password_hash, email, full_name, role, is_active
+            FROM users
+            WHERE username = ?
+        ");
+
         $stmt->execute([$username]);
+
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password_hash'])) {
+
             if (!$user['is_active']) {
-                $error = 'Your account has been deactivated. Please contact administrator.';
+
+                $error = 'Your account has been deactivated.';
+
             } else {
-                // Set session variables
+
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['email'] = $user['email'];
@@ -47,38 +59,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['role'] = $user['role'];
                 $_SESSION['last_activity'] = time();
 
-                // Update last login
+                // Update login time
                 $stmt = $db->prepare("UPDATE users SET last_login = NOW() WHERE id = ?");
                 $stmt->execute([$user['id']]);
 
-                // Log activity
                 logActivity('login', 'User logged in successfully');
 
                 header("Location: " . BASE_URL . "/dashboard.php");
                 exit();
             }
+
         } else {
+
             $error = 'Invalid username or password.';
-            logActivity('login_failed', "Failed login attempt for username: $username");
+            logActivity('login_failed', "Failed login for: $username");
         }
     }
 }
 
-// Check for timeout message
 if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
     $error = 'Your session has expired. Please login again.';
 }
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Login - <?php echo APP_NAME; ?></title>
+
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
     <style>
         * {
             margin: 0;
@@ -90,37 +114,62 @@ if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
             font-family: 'Poppins', sans-serif;
             min-height: 100vh;
             display: flex;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            position: relative;
             overflow-x: hidden;
+            background:
+                radial-gradient(circle at top left, rgba(255, 215, 0, 0.12), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(255, 140, 0, 0.15), transparent 35%),
+                linear-gradient(135deg, #0f172a 0%, #111827 45%, #1e293b 100%);
+            position: relative;
         }
 
-        /* Animated background particles */
+        body::before,
+        body::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+        }
+
+        body::before {
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 215, 0, 0.18);
+            top: -100px;
+            left: -100px;
+        }
+
+        body::after {
+            width: 350px;
+            height: 350px;
+            background: rgba(255, 140, 0, 0.12);
+            bottom: -120px;
+            right: -120px;
+        }
+
+        /* Particles */
+
         .particles {
             position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
             overflow: hidden;
+            pointer-events: none;
             z-index: 0;
         }
 
         .particle {
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 215, 0, 0.3);
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 215, 0, 0.4);
             border-radius: 50%;
-            animation: float 15s infinite;
+            animation: float 16s linear infinite;
         }
 
         @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(100vh) rotate(0deg);
+            0% {
+                transform: translateY(100vh) scale(0);
                 opacity: 0;
             }
 
@@ -128,45 +177,47 @@ if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
                 opacity: 1;
             }
 
-            90% {
-                opacity: 1;
-            }
-
             100% {
-                transform: translateY(-100vh) rotate(720deg);
+                transform: translateY(-100vh) scale(1);
                 opacity: 0;
             }
         }
 
-        /* Left side - Branding */
+        /* Brand Section */
+
         .brand-section {
             flex: 1;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             padding: 3rem;
             position: relative;
             z-index: 1;
         }
 
         .brand-content {
+            max-width: 520px;
             text-align: center;
-            color: white;
-            max-width: 500px;
         }
 
         .logo-container {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 2rem;
             border-radius: 50%;
+            background: linear-gradient(135deg, #FFD700, #FFB800);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 2rem;
-            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3), 0 0 60px rgba(255, 215, 0, 0.2);
-            animation: pulse 2s ease-in-out infinite;
+            box-shadow:
+                0 10px 40px rgba(255, 215, 0, 0.35),
+                0 0 80px rgba(255, 215, 0, 0.2);
+            animation: pulse 3s infinite ease-in-out;
+        }
+
+        .logo-container i {
+            font-size: 3.8rem;
+            color: #111827;
         }
 
         @keyframes pulse {
@@ -177,60 +228,66 @@ if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
             }
 
             50% {
-                transform: scale(1.05);
+                transform: scale(1.06);
             }
-        }
-
-        .logo-container i {
-            font-size: 3.5rem;
-            color: #1a1a2e;
         }
 
         .brand-title {
             font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #FFD700, #fff0a5, #FFB800);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .brand-subtitle {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
         }
 
         .features {
             display: flex;
-            gap: 2rem;
             justify-content: center;
+            gap: 1.8rem;
             flex-wrap: wrap;
         }
 
         .feature-item {
-            text-align: center;
+            width: 120px;
             padding: 1rem;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-6px);
         }
 
         .feature-item i {
-            font-size: 1.5rem;
+            font-size: 1.7rem;
             color: #FFD700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.7rem;
             display: block;
         }
 
         .feature-item span {
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.88rem;
+            font-weight: 500;
         }
 
-        /* Right side - Login Form */
+        /* Login Section */
+
         .login-section {
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -240,19 +297,21 @@ if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
         }
 
         .login-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 2.5rem;
             width: 100%;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
-            animation: slideIn 0.6s ease-out;
+            padding: 2.8rem;
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.35);
+            animation: slideIn 0.7s ease;
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateX(30px);
+                transform: translateX(40px);
             }
 
             to {
@@ -268,53 +327,52 @@ if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
 
         .login-header h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.75rem;
-            color: #1a1a2e;
+            font-size: 2rem;
+            color: white;
             margin-bottom: 0.5rem;
         }
 
         .login-header p {
-            color: #6c757d;
-            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
         }
+
+        /* Form */
 
         .form-floating {
             position: relative;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.4rem;
         }
 
         .form-floating>.form-control {
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
-            height: 56px;
-            padding-left: 3rem;
+            height: 60px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            padding-left: 3.2rem;
             font-size: 0.95rem;
-            transition: all 0.3s ease;
         }
 
         .form-floating>.form-control:focus {
             border-color: #FFD700;
-            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15);
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
         }
 
         .form-floating>label {
-            padding-left: 3rem;
-            color: #6c757d;
+            padding-left: 3.2rem;
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .input-icon {
             position: absolute;
-            left: 1rem;
             top: 50%;
+            left: 1.1rem;
             transform: translateY(-50%);
-            color: #adb5bd;
+            color: rgba(255, 255, 255, 0.55);
+            z-index: 10;
             font-size: 1.1rem;
-            z-index: 2;
-            transition: color 0.3s ease;
-        }
-
-        .form-floating>.form-control:focus~.input-icon {
-            color: #FFD700;
         }
 
         .password-toggle {
@@ -322,124 +380,74 @@ if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
             right: 1rem;
             top: 50%;
             transform: translateY(-50%);
-            background: none;
             border: none;
-            color: #adb5bd;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.6);
+            z-index: 10;
             cursor: pointer;
-            z-index: 2;
-            padding: 0.25rem;
-            transition: color 0.3s ease;
         }
 
         .password-toggle:hover {
             color: #FFD700;
         }
 
+        /* Button */
+
         .btn-login {
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            border: none;
-            border-radius: 12px;
-            padding: 1rem;
-            font-weight: 600;
-            font-size: 1rem;
-            color: #1a1a2e;
             width: 100%;
+            border: none;
+            border-radius: 16px;
+            padding: 1rem;
             margin-top: 0.5rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            background: linear-gradient(135deg, #FFD700, #FFB800);
+            color: #111827;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: 0.3s;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
         }
 
         .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
-            color: #1a1a2e;
-        }
-
-        .btn-login:active {
-            transform: translateY(0);
+            transform: translateY(-3px);
+            box-shadow: 0 14px 35px rgba(255, 215, 0, 0.4);
         }
 
         .alert {
             border: none;
-            border-radius: 12px;
-            padding: 1rem 1.25rem;
-            margin-bottom: 1.5rem;
+            border-radius: 14px;
         }
 
         .alert-danger {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            background: rgba(255, 0, 0, 0.15);
             color: white;
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 1.5rem 0;
-            color: #adb5bd;
-            font-size: 0.85rem;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #dee2e6, transparent);
-        }
-
-        .divider span {
-            padding: 0 1rem;
-        }
-
-        .default-login {
-            text-align: center;
-            padding: 1rem;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 12px;
-            border: 1px dashed #dee2e6;
-        }
-
-        .default-login small {
-            color: #6c757d;
-            font-size: 0.85rem;
-        }
-
-        .default-login strong {
-            color: #1a1a2e;
+            backdrop-filter: blur(10px);
         }
 
         /* Responsive */
+
         @media (max-width: 991px) {
+
             body {
                 flex-direction: column;
             }
 
             .brand-section {
                 padding: 2rem 1.5rem;
-                min-height: auto;
             }
 
             .brand-title {
-                font-size: 2rem;
-            }
-
-            .features {
-                gap: 1rem;
+                font-size: 2.3rem;
             }
 
             .login-section {
                 max-width: 100%;
-                padding: 1.5rem;
-            }
-
-            .login-card {
-                padding: 2rem;
             }
         }
 
         @media (max-width: 576px) {
+
             .brand-title {
-                font-size: 1.75rem;
+                font-size: 2rem;
             }
 
             .logo-container {
@@ -448,133 +456,207 @@ if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
             }
 
             .logo-container i {
-                font-size: 2.5rem;
+                font-size: 3rem;
             }
 
             .login-card {
                 padding: 1.5rem;
-                border-radius: 20px;
+            }
+
+            .feature-item {
+                width: 100px;
             }
         }
     </style>
+
 </head>
 
 <body>
-    <!-- Animated Particles -->
+
+    <!-- Particles -->
     <div class="particles" id="particles"></div>
 
     <!-- Brand Section -->
     <div class="brand-section">
+
         <div class="brand-content">
+
             <div class="logo-container">
                 <i class="bi bi-gem"></i>
             </div>
+
             <h1 class="brand-title"><?php echo APP_NAME; ?></h1>
-            <p class="brand-subtitle">JewelSync ERP - Premium Jewellery Management</p>
+
+            <p class="brand-subtitle">
+                Premium Jewellery ERP Management System
+            </p>
 
             <div class="features">
+
                 <div class="feature-item">
                     <i class="bi bi-receipt"></i>
-                    <span>GST Invoicing</span>
+                    <span>GST Billing</span>
                 </div>
+
                 <div class="feature-item">
                     <i class="bi bi-box-seam"></i>
                     <span>Inventory</span>
                 </div>
+
                 <div class="feature-item">
-                    <i class="bi bi-graph-up"></i>
-                    <span>Reports</span>
+                    <i class="bi bi-bar-chart"></i>
+                    <span>Analytics</span>
                 </div>
+
             </div>
+
         </div>
+
     </div>
 
     <!-- Login Section -->
+
     <div class="login-section">
+
         <div class="login-card">
+
             <div class="login-header">
                 <h2>Welcome Back</h2>
-                <p>Sign in to access your dashboard</p>
+                <p>Login to continue your dashboard</p>
             </div>
 
             <?php if ($error): ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+
+                <div class="alert alert-danger alert-dismissible fade show">
+
                     <i class="bi bi-exclamation-circle-fill me-2"></i>
+
                     <?php echo $error; ?>
+
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+
                 </div>
+
             <?php endif; ?>
 
-            <form method="POST" action="" id="loginForm">
-                <div class="form-floating">
-                    <i class="bi bi-person input-icon"></i>
-                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required autofocus>
-                    <label for="username">Username</label>
-                </div>
+            <form method="POST">
+
+                <!-- Username -->
 
                 <div class="form-floating">
-                    <i class="bi bi-lock input-icon"></i>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-                    <label for="password">Password</label>
-                    <button type="button" class="password-toggle" onclick="togglePassword()">
-                        <i class="bi bi-eye" id="toggleIcon"></i>
-                    </button>
+
+                    <i class="bi bi-person input-icon"></i>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="username"
+                        name="username"
+                        placeholder="Username"
+                        required>
+
+                    <label for="username">Username</label>
+
                 </div>
+
+                <!-- Password -->
+
+                <div class="form-floating">
+
+                    <i class="bi bi-lock input-icon"></i>
+
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        name="password"
+                        placeholder="Password"
+                        required>
+
+                    <label for="password">Password</label>
+
+                    <button type="button" class="password-toggle" onclick="togglePassword()">
+
+                        <i class="bi bi-eye" id="toggleIcon"></i>
+
+                    </button>
+
+                </div>
+
+                <!-- Login Button -->
 
                 <button type="submit" class="btn btn-login">
-                    <i class="bi bi-box-arrow-in-right me-2"></i> Sign In
+
+                    <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                    Sign In
+
                 </button>
+
             </form>
 
-
         </div>
+
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Create floating particles
-        function createParticles() {
-            const container = document.getElementById('particles');
-            const particleCount = 30;
+    <!-- Bootstrap JS -->
 
-            for (let i = 0; i < particleCount; i++) {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+        // Floating particles
+
+        function createParticles() {
+
+            const container = document.getElementById('particles');
+
+            for (let i = 0; i < 30; i++) {
+
                 const particle = document.createElement('div');
+
                 particle.className = 'particle';
+
                 particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 15 + 's';
+
+                particle.style.animationDelay = Math.random() * 10 + 's';
+
                 particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+
                 container.appendChild(particle);
             }
         }
 
         createParticles();
 
-        // Toggle password visibility
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const toggleIcon = document.getElementById('toggleIcon');
+        // Password toggle
 
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.classList.remove('bi-eye');
-                toggleIcon.classList.add('bi-eye-slash');
+        function togglePassword() {
+
+            const password = document.getElementById('password');
+
+            const icon = document.getElementById('toggleIcon');
+
+            if (password.type === 'password') {
+
+                password.type = 'text';
+
+                icon.classList.remove('bi-eye');
+
+                icon.classList.add('bi-eye-slash');
+
             } else {
-                passwordInput.type = 'password';
-                toggleIcon.classList.remove('bi-eye-slash');
-                toggleIcon.classList.add('bi-eye');
+
+                password.type = 'password';
+
+                icon.classList.remove('bi-eye-slash');
+
+                icon.classList.add('bi-eye');
             }
         }
 
-        // Add subtle animation on input focus
-        document.querySelectorAll('.form-control').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.style.transform = 'scale(1.02)';
-            });
-            input.addEventListener('blur', function() {
-                this.parentElement.style.transform = 'scale(1)';
-            });
-        });
     </script>
+
 </body>
 
 </html>
