@@ -1,145 +1,373 @@
 <<<<<<< HEAD
 
-# JewelSync ERP — Jewellery Billing & Inventory System
+<div align="center">
 
-Lightweight PHP-based billing, inventory and invoicing system tailored for jewellery stores.
+# 💎 JewelSync ERP
+### ✨ Premium Jewellery Billing & Inventory Management System ✨
 
-## Quick summary
+<img src="https://readme-typing-svg.herokuapp.com?font=Poppins&size=28&duration=3000&color=F7C600&center=true&vCenter=true&width=900&lines=Jewellery+Billing+%26+Inventory+System;Built+with+PHP+%2B+MySQL;GST+Billing+%7C+Inventory+%7C+Reports;Professional+ERP+for+Jewellery+Stores" />
 
-- Purpose: manage customers, invoices, metal rates, stock, payments and reports.
-- Language: PHP (PDO), MySQL (MariaDB/MySQL)
-- Recommended for: small retail jewellery shops, local deployments (XAMPP, MAMP, LAMP).
+<br>
 
-## Checklist (your request)
+<img src="https://img.shields.io/badge/PHP-7.4+-777BB4?style=for-the-badge&logo=php&logoColor=white" />
+<img src="https://img.shields.io/badge/MySQL-5.7+-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
+<img src="https://img.shields.io/badge/Bootstrap-5-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" />
+<img src="https://img.shields.io/badge/Status-Active-success?style=for-the-badge" />
+<img src="https://img.shields.io/badge/Open%20Source-Yes-brightgreen?style=for-the-badge" />
+
+<br><br>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=F7C600&height=120&section=header"/>
+
+</div>
+
+---
+
+# 📌 About The Project
+
+JewelSync ERP is a modern Jewellery Billing & Inventory System developed for jewellery stores and retail businesses.  
+The system helps manage GST billing, jewellery inventory, invoices, customer ledgers, stock management, payments, reports, and daily metal rates through a centralized web platform.
+
+---
+
+# ✨ Quick Summary
+
+| Feature | Details |
+|---|---|
+| 🎯 Purpose | manage customers, invoices, metal rates, stock, payments and reports |
+| 💻 Language | PHP (PDO), MySQL (MariaDB/MySQL) |
+| 🏪 Recommended For | small retail jewellery shops |
+| ⚙️ Deployment | XAMPP, MAMP, LAMP |
+
+---
+
+# ✅ Checklist (your request)
 
 - [x] Provide a README describing the project and how to run it locally.
 - [x] Start the project locally (PHP built-in server) — server started in background. Database import still required for full functionality.
 
-## Requirements
+---
 
-- PHP 7.4+ with PDO and common extensions (pdo_mysql, mbstring, json, gd as needed)
-- MySQL 5.7+ or MariaDB
-- Web server (optional): Apache / Nginx / XAMPP / MAMP
-- Command line access or phpMyAdmin for importing the DB schema
+# ⚙️ Requirements
 
-## Quick start (recommended for local development)
+<div align="center">
 
-1. Create the database and import the schema:
+| Technology | Version |
+|---|---|
+| 🐘 PHP | 7.4+ |
+| 🛢️ MySQL | 5.7+ |
+| 🧩 MariaDB | Supported |
+| 🎨 Bootstrap | 5 |
+| 🌐 Web Server | Apache / Nginx / XAMPP / MAMP |
+
+</div>
+
+### Required PHP Extensions
+
+```bash
+pdo_mysql
+mbstring
+json
+gd
+```
+
+---
+
+# 🚀 Quick Start (Recommended for Local Development)
+
+## 1️⃣ Create Database & Import Schema
 
 ```bash
 # create database (if using mysql CLI)
 mysql -u root -p < database/schema.sql
 ```
 
-Or import `database/schema.sql` via phpMyAdmin or your preferred DB tool. Default DB name in the schema: `jewellery_billing`.
+Or import:
 
-2. Update DB credentials if needed in `config/database.php` (defaults: host 127.0.0.1, user root, empty password).
+```bash
+database/schema.sql
+```
 
-3. Run the PHP built-in server from the project root (for development):
+using phpMyAdmin or any preferred DB tool.
+
+Default DB Name:
+
+```bash
+jewellery_billing
+```
+
+---
+
+## 2️⃣ Configure Database
+
+Update credentials if needed in:
+
+```bash
+config/database.php
+```
+
+Default values:
+
+| Setting | Default |
+|---|---|
+| Host | 127.0.0.1 |
+| Username | root |
+| Password | *(empty)* |
+
+---
+
+## 3️⃣ Run Development Server
 
 ```bash
 cd /path/to/jewellery
 php -S 127.0.0.1:8000
 ```
 
-Then open http://127.0.0.1:8000 in your browser. The root `index.php` redirects to `login.php`.
+---
 
-Alternative: use XAMPP or MAMP — place the `jewellery` folder inside your webserver's document root (for XAMPP on macOS: `/Applications/XAMPP/htdocs/jewellery`) and access via http://localhost/jewellery.
+## 4️⃣ Open In Browser
 
-## Default credentials
+```bash
+http://127.0.0.1:8000
+```
+
+The root `index.php` redirects to `login.php`.
+
+---
+
+# 💻 Alternative Setup (XAMPP / MAMP)
+
+Place the `jewellery` folder inside your server document root.
+
+### Example (XAMPP macOS)
+
+```bash
+/Applications/XAMPP/htdocs/jewellery
+```
+
+Access project:
+
+```bash
+http://localhost/jewellery
+```
+
+---
+
+# 🔐 Default Credentials
 
 Per the project setup notes, the initial default credentials are:
 
-- Username: `admin`
-- Password: `admin123`
+<div align="center">
 
-Change the password immediately after first login.
+| Username | Password |
+|---|---|
+| `admin` | `admin123` |
 
-## Project configuration
+</div>
 
-- Database configuration: `config/database.php` — update DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME as needed.
-- Application constants: `config/constants.php` (BASE_URL, session settings, GST rates, paths).
+⚠️ Change the password immediately after first login.
 
-Notes:
+---
 
-- If you run inside a subdirectory (for example with XAMPP at `/jewellery`), set `BASE_URL` in `config/constants.php` to `'/jewellery'`.
+# 🛠️ Project Configuration
 
-## Folder overview
+## 📂 Database Configuration
 
-Key folders and responsibilities:
-
-- `ajax/` — AJAX endpoints used by the frontend
-- `api/` — lightweight API endpoints
-- `assets/` — CSS and JS
-<!-- Merged README: combines both summaries and usage instructions -->
-
-# JewelSync ERP — Jewellery Billing & Inventory System
-
-Lightweight PHP-based billing, inventory and invoicing system tailored for jewellery stores.
-
-## One-line summary
-
-- Purpose: manage customers, invoices, metal rates, stock, payments and reports.
-- Language: PHP (PDO), MySQL (MariaDB/MySQL)
-
-## Requirements
-
-- PHP 7.4+ with PDO and common extensions (pdo_mysql, mbstring, json)
-- MySQL 5.7+ / MariaDB
-- Web server (Apache/Nginx) or PHP built-in server for development
-
-## Quick start (local)
-
-1. Import database schema:
+File:
 
 ```bash
-mysql -u root -p < database/schema.sql
+config/database.php
 ```
 
-2. Update DB credentials in `config/database.php` and `BASE_URL` in `config/constants.php` when needed.
+Update:
+- `DB_HOST`
+- `DB_USERNAME`
+- `DB_PASSWORD`
+- `DB_NAME`
 
-3. Start dev server:
+---
+
+## ⚙️ Application Constants
+
+File:
 
 ```bash
-cd /path/to/jewellery
-php -S 127.0.0.1:8000
+config/constants.php
 ```
 
-4. Open http://127.0.0.1:8000 (or http://localhost/jewellery for XAMPP).
+Contains:
+- `BASE_URL`
+- session settings
+- GST rates
+- paths
 
-## Default credentials (if present)
+### Notes
 
-- Username: `admin`
-- Password: `admin123`
+If running inside a subdirectory:
 
-## Important files & folders
+```php
+BASE_URL = '/jewellery';
+```
 
-- `index.php` — app entry (redirects to `login.php`)
-- `config/` — DB and app config
-- `database/schema.sql` — DB schema
-- `includes/` — shared PHP includes (`functions.php`, `header.php`, `footer.php`)
+---
 
-## Troubleshooting notes
+# 📂 Folder Structure
 
-- Database connection issues: ensure MySQL is running and `config/database.php` matches credentials & host.
-- Port conflicts: XAMPP and Homebrew MySQL both bind to 3306 — stop one before starting the other.
+```bash
+📦 jewellery
+ ┣ 📂 ajax
+ ┣ 📂 api
+ ┣ 📂 assets
+ ┣ 📂 config
+ ┣ 📂 database
+ ┣ 📂 includes
+ ┣ 📂 uploads
+ ┣ 📂 reports
+ ┣ 📜 index.php
+ ┣ 📜 login.php
+ ┗ 📜 dashboard.php
+```
 
-## Next steps
+---
+
+# 📁 Important Files & Folders
+
+| File / Folder | Purpose |
+|---|---|
+| `index.php` | Application entry point |
+| `login.php` | Login page |
+| `dashboard.php` | Main dashboard |
+| `config/` | App configuration |
+| `database/schema.sql` | Database schema |
+| `includes/` | Shared reusable components |
+
+---
+
+# 🌟 Core Features
+
+<div align="center">
+
+| Module | Features |
+|---|---|
+| 👥 Customer Management | Add/Edit/Delete customers, ledgers, balances |
+| 💎 Jewellery Billing | GST invoices, multi-item billing, PDF invoices |
+| 📦 Inventory | Stock inward/outward, purity-wise stock |
+| 💳 Payments | Cash, Bank, UPI, Cheque |
+| 📈 Reports | Sales, GST, stock, outstanding reports |
+
+</div>
+
+---
+
+# 🧾 Jewellery Billing Features
+
+- Jewellery categories (Ring, Chain, Bangle, etc.)
+- Purity options (22K, 18K, Silver 925)
+- Gross and net weight calculation
+- Wastage handling
+- Making charges (per gram / fixed)
+- Automatic GST calculation (default 3%)
+- Multi-item invoice with PDF download
+
+---
+
+# 📦 Inventory & Stock Management
+
+- Opening stock entry
+- Stock inward and outward
+- Automatic stock deduction after billing
+- Metal-wise and purity-wise stock view
+- Low stock alerts
+
+---
+
+# 💳 Payments & Ledger
+
+- Payment entry (Cash, Bank, UPI, Cheque)
+- Partial payment support
+- Outstanding balance auto update
+
+---
+
+# 📊 Reports
+
+- Date-wise sales report
+- Customer-wise sales report
+- Stock report
+- Outstanding payment report
+- GST summary report
+
+---
+
+# 🛠️ Troubleshooting Notes
+
+## ❌ Database Connection Issues
+
+Ensure:
+- MySQL is running
+- Credentials are correct
+- Database exists
+
+---
+
+## ⚠️ Port Conflicts
+
+XAMPP and Homebrew MySQL may both use:
+
+```bash
+3306
+```
+
+Stop one before starting the other.
+
+---
+
+# 📌 Next Steps
 
 - Optionally import sample data from `database/` scripts.
 - Adjust `BASE_URL` when deploying under a subdirectory.
 
 ---
 
-If you want, I can import the schema and create a test admin user for you (provide DB credentials), or push the changes to GitHub for you.
+# 🚀 Future Improvements
 
-## Next steps / suggestions
+- Automated installer setup
+- Docker support
+- Unit & integration testing
+- Barcode integration
+- Multi-branch support
+- Advanced analytics dashboard
 
-- Add an automated installer script that sets up the database and writes `config/database.php`.
-- Add unit/integration tests and a small Dockerfile or Compose for reproducible local development.
+---
 
-## License & author
+# 📄 License & Author
 
-Repository: `omsoni21/jewellery` (owner: omsoni21). No license file is included — add one if you want to make the project open source.
+Repository:
+
+```bash
+omsoni21/jewellery
+```
+
+Owner:
+
+```bash
+omsoni21
+```
+
+No license file is included — add one if you want to make the project open source.
+
+---
+
+<div align="center">
+
+## ⭐ Support The Project
+
+If you like this project, consider giving it a ⭐ on GitHub.
+
+<br><br>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=F7C600&height=120&section=footer"/>
+
+</div>
 
 > > > > > > > origin/main
