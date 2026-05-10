@@ -412,7 +412,7 @@ omsoni21/jewelsync_ERP
 Owner:
 
 ```bash
-omsoni21
+omsoni21, tanishadale13, Sankitsingh21.
 ```
 
 ---
